@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Terra Mágica - Simulador Medieval</title>
+    <!-- Motor Phaser 3 -->
+    <script src="https://cdn.jsdelivr.net/npm/phaser@3.60.0/dist/phaser.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a;
+            overflow: hidden;
+            font-family: sans-serif;
+        }
+        #game-container {
+            width: 100vw;
+            height: 100vh;
+        }
+        .ui-overlay {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            color: white;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ui-overlay">
+        🏰 <strong>Terra Mágica</strong> | Aldea en construcción
+    </div>
+
+    <div id="game-container"></div>
+
+    <script>
+        const config = {
+            type: Phaser.AUTO,
+            width: window.innerWidth,
+            height: window.innerHeight,
+            parent: 'game-container',
+            pixelArt: true,
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        const game = new Phaser.Game(config);
+
+        function preload() {
+            // Cargamos la imagen del castillo con transparencia
+            this.load.image('castillo', 'https://cdn.jsdelivr.net/gh/photonstorm/phaser3-examples@master/public/assets/sprites/castle.png');
+        }
+
+        function create() {
+            // Fondo verde estilo pasto
+            this.cameras.main.setBackgroundColor('#347928');
+
+            // Centramos el castillo en la pantalla
+            const centerX = window.innerWidth / 2;
+            const centerY = window.innerHeight / 2;
+
+            const castillo = this.add.image(centerX, centerY, 'castillo');
+            castillo.setScale(1.5);
+
+            // Texto descriptivo
+            this.add.text(centerX, centerY + 120, "¡Tu Castillo Real!", {
+                font: "18px Arial",
+                fill: "#ffffff",
+                backgroundColor: "rgba(0,0,0,0.5)",
+                padding: { x: 8, y: 4 }
+            }).setOrigin(0.5);
+        }
+
+        function update() {
+            // Lógica en tiempo real del juego
+        }
+    </script>
+</body>
+</html>
