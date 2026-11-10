@@ -23,12 +23,13 @@
             top: 15px;
             left: 15px;
             color: white;
-            background: rgba(0, 0, 0, 0.7);
+            background: rgba(0, 0, 0, 0.75);
             padding: 12px 18px;
             border-radius: 8px;
             font-size: 16px;
             pointer-events: none;
             box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            z-index: 10;
         }
     </style>
 </head>
@@ -61,8 +62,39 @@
         const game = new Phaser.Game(config);
 
         function preload() {
-            // Cargamos imágenes de prueba para el castillo y la zona de recursos
-            this.load.image('castillo', 'https://cdn.jsdelivr.net/gh/photonstorm/phaser3-examples@master/public/assets/sprites/castle.png');
+            // Generar una textura limpia de Castillo vectorial en tiempo real para evitar fallos de carga
+            const graphics = this.make.graphics({x: 0, y: 0, add: false});
+            
+            // Paredes principales del castillo
+            graphics.fillStyle(0x7f8c8d);
+            graphics.fillRect(10, 20, 60, 50);
+            
+            // Torres laterales
+            graphics.fillStyle(0x95a5a6);
+            graphics.fillRect(0, 10, 20, 60);
+            graphics.fillRect(60, 10, 20, 60);
+            
+            // Tejados
+            graphics.fillStyle(0xc0392b);
+            graphics.beginPath();
+            graphics.moveTo(0, 10);
+            graphics.lineTo(10, 0);
+            graphics.lineTo(20, 10);
+            graphics.fillPath();
+            
+            graphics.beginPath();
+            graphics.moveTo(60, 10);
+            graphics.lineTo(70, 0);
+            graphics.lineTo(80, 10);
+            graphics.fillPath();
+
+            // Puerta principal
+            graphics.fillStyle(0x5c4033);
+            graphics.fillRect(30, 45, 20, 25);
+
+            graphics.generateTexture('castillo_grafico', 80, 70);
+
+            // Carga de árboles
             this.load.image('arbol', 'https://cdn.jsdelivr.net/gh/photonstorm/phaser3-examples@master/public/assets/sprites/tree.png');
         }
 
@@ -73,23 +105,23 @@
             const centerX = window.innerWidth / 2;
             const centerY = window.innerHeight / 2;
 
-            // Añadimos el Castillo en el centro
-            const castillo = this.add.image(centerX, centerY, 'castillo');
-            castillo.setScale(1.3);
+            // Añadir el castillo generado perfectamente
+            const castillo = this.add.image(centerX, centerY - 20, 'castillo_grafico');
+            castillo.setScale(1.8);
 
-            // Añadimos árboles decorativos alrededor simulando el bosque del leñador
+            // Árboles decorativos alrededor
             this.add.image(centerX - 120, centerY - 80, 'arbol').setScale(1.2);
             this.add.image(centerX + 140, centerY + 90, 'arbol').setScale(1.2);
 
-            // Título de la aldea
-            this.add.text(centerX, centerY + 130, "Aldea Principal", {
+            // Etiqueta de la aldea
+            this.add.text(centerX, centerY + 60, "Castillo Real", {
                 font: "16px Arial",
                 fill: "#ffffff",
                 backgroundColor: "rgba(0,0,0,0.6)",
                 padding: { x: 8, y: 4 }
             }).setOrigin(0.5);
 
-            // Simulación de producción automática de madera cada 2 segundos
+            // Producción automática de madera
             this.time.addEvent({
                 delay: 2000,
                 callback: () => {
@@ -101,10 +133,8 @@
         }
 
         function update() {
-            // Lógica por fotograma
+            // Bucle principal del juego
         }
     </script>
 </body>
 </html>
-
-            
